@@ -1,9 +1,11 @@
 import sys
 import random
-from PySide6 import QtCore, QtWidgets, QtGui
 
 import api
+from window import WindowManager
+wm = WindowManager()
 
+wm.load()
 user = 0
 game = 5685
 
