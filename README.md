@@ -25,3 +25,6 @@ Future Features / TODO
 V2
 - Access the website VIA logging into the game to be able to do actions via the application
 - upgraded star helper, buying tech ect..
+
+
+testing git -> discord webhook
