@@ -67,7 +67,6 @@ class StarMapScene(QtWidgets.QGraphicsScene):
 		self.area.setPen(QtCore.Qt.PenStyle.NoPen)
 		self.area.setPos(0,0)
 		self.stars = []
-		self.stars = []
 
 	def update_stars(self, star_data):
 		"""Generic update method: clears and adds new stars"""
@@ -86,8 +85,10 @@ class StarMapView(QtWidgets.QGraphicsView):
 		self.setRenderHint(QtGui.QPainter.RenderHint.Antialiasing)
 		self.setBackgroundBrush(QtCore.Qt.GlobalColor.black)
 		self.setDragMode(QtWidgets.QGraphicsView.DragMode.ScrollHandDrag)
-		self.scale_factor = 1
-		self.max_scale = 100
+		self.scale_factor = 1.0
+
+		self.LABEL_SHOW_SCALE = 10
+		self.is_labels_showing = None
 
 	def wheelEvent(self, event):
 		zoom = 1.15 if event.angleDelta().y() > 0 else (1/1.15)
@@ -116,7 +117,26 @@ class StarMapView(QtWidgets.QGraphicsView):
 		self.scale(zoom, zoom)
 		self.scale_factor = new_scale
 
+		self.update_labels_visibility()
 
+	# Toggles labels based on zoom level
+	def update_labels_visibility(self):
+		# Determines whether star labels should be shown
+		show = self.scale_factor >= self.LABEL_SHOW_SCALE
+		# Cancels if there is no scene
+		if self.scene() is None:
+			return
+
+		if self.is_labels_showing == show:
+			return
+
+		for star in self.scene().stars:
+			# Checks object is a StarItem
+			if not isinstance(star, StarItem):
+				continue
+
+			# Updates visibility
+			star.label.setVisible(show)
 
 # === Main window ===
 
