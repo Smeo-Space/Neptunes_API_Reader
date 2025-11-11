@@ -1,5 +1,15 @@
 class Star:
-    def __init__(self, data):
+    _stars_by_id = {}
+
+    @classmethod
+    def register(cls, star):
+        cls._stars_by_id[star.id] = star
+
+    @classmethod
+    def get(cls, star_id):
+        return cls._stars_by_id.get(star_id)
+
+    def __init__(self, data, register=True):
         self.id = data['uid']
         self.visible = bool(data['v'])
 
@@ -15,11 +25,12 @@ class Star:
         self.resources = data.get('r')
 
         self.economy = data.get('s')
-        self.industry = data('i')
-        self.science = data('s')
+        self.industry = data.get('i')
+        self.science = data.get('s')
 
         self.ship_build_progress = data.get('yard')
 
-
         #TODO: nr (resources based off terraforming?), ga
 
+        if register:
+            self.__class__.register(self)
