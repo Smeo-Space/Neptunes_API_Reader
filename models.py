@@ -1,4 +1,6 @@
+from __future__ import annotations
 from copy import deepcopy
+
 
 class Star:
     _stars_by_id = {}
@@ -8,11 +10,11 @@ class Star:
         cls._stars_by_id[star.id] = star
 
     @classmethod
-    def get(cls, star_id):
+    def get(cls, star_id) -> Star:
         return cls._stars_by_id.get(star_id)
 
     @classmethod
-    def get_all(cls):
+    def get_all(cls) -> dict[Star]:
         return deepcopy(cls._stars_by_id)
 
     def __init__(self, data, register=True):
@@ -50,11 +52,11 @@ class Player:
         cls._players_by_id[player.id] = player
 
     @classmethod
-    def get(cls, player_id):
+    def get(cls, player_id) -> Player:
         return cls._players_by_id.get(player_id)
 
     @classmethod
-    def get_all(cls):
+    def get_all(cls) -> dict[Player]:
         return deepcopy(cls._players_by_id)
 
     def __init__(self, data, register=True):
@@ -100,11 +102,11 @@ class Fleet:
         cls._fleets_by_id[fleet.id] = fleet
 
     @classmethod
-    def get(cls, fleet_id):
+    def get(cls, fleet_id) -> Fleet:
         return cls._fleets_by_id.get(fleet_id)
 
     @classmethod
-    def get_all(cls):
+    def get_all(cls) -> dict[Fleet]:
         return deepcopy(cls._fleets_by_id)
 
     def __init__(self, data, register=True):

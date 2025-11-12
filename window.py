@@ -1,5 +1,6 @@
 import sys, random, json
 from PySide6 import QtCore, QtGui, QtWidgets
+from models import Star
 import api,settings
 
 
@@ -9,21 +10,27 @@ SCALE = 100 # times x y vales by to get to screen size
 # === Star-related classes ===
 
 class StarItem(QtWidgets.QGraphicsEllipseItem):
-	def __init__(self, data):
+	def __init__(self, star: Star):
+
+		# Size
 		size = 10
-		x = data["x"]*SCALE
-		y = data["y"]*SCALE
-		name = data["n"]
-		exp = data["exp"]
-		puid = data["puid"]
-		v = data["v"]
+		x = star.x * SCALE
+		y = star.y * SCALE
+
+		# Star details
+		name = star.name
+		owning_player = star.owning_player()
+
+		# Creating UI item
 		super().__init__(-size / 2, -size / 2, size, size)
 		self.setPos(x, y)
 		self.name = name
-		if puid == -1:
+
+		# Colour
+		if owning_player is None:
 			colour = settings.colour_key[0]
 		else:
-			colour = settings.colour_key[api.json()["players"][f"{puid}"]["color"]+1] # dont know if +1 is good or if its silly and i messued up the colour key
+			colour = settings.colour_key[owning_player.colour + 1] # dont know if +1 is good or if its silly and i messued up the colour key
 		self.setBrush(QtGui.QBrush(QtGui.QColor(*colour)))
 		self.setPen(QtCore.Qt.PenStyle.NoPen)
 
@@ -68,15 +75,21 @@ class StarMapScene(QtWidgets.QGraphicsScene):
 		self.area.setPos(0,0)
 		self.stars = []
 
-	def update_stars(self, star_data):
+	def update_stars(self, stars : dict[Star]):
 		"""Generic update method: clears and adds new stars"""
+
+		# Removes all stars from view
 		for star in self.stars:
 			self.removeItem(star)
+
+		# Clears stars record
 		self.stars.clear()
-		for starid, data in star_data.items():
-			star = StarItem(data)
-			self.addItem(star)
-			self.stars.append(star)
+
+		# Replaces stars into view
+		for _, star in stars.items():
+			star_item = StarItem(star)
+			self.addItem(star_item)
+			self.stars.append(star_item)
 
 
 class StarMapView(QtWidgets.QGraphicsView):
@@ -180,9 +193,9 @@ class CanvasWindow(QtWidgets.QMainWindow):
 		layout.addWidget(left_panel)
 		layout.addWidget(map_frame, 1)
 
-	def load_map(self, star_data):
+	def load_map(self, stars : dict[Star]):
 		"""Update the starmap with new star positions"""
-		self.scene.update_stars(star_data)
+		self.scene.update_stars(stars)
 
 
 # === Window manager ===
@@ -195,7 +208,7 @@ class WindowManager:
 	def load(self):
 		self.window.show()
 
-	def update_map(self, stars):
+	def update_map(self, stars : dict[Star]):
 		self.window.load_map(stars)
 
 	def app_exec(self):
