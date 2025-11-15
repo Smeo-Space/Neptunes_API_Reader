@@ -3,3 +3,7 @@ __pycache__
 __pycache__/api.cpython-313.pyc
 __pycache__/settings.cpython-313.pyc
 __pycache__/window.cpython-313.pyc
+site_assets.zip
+.gitignore
+test_api.py
+__pycache__/
