@@ -75,7 +75,7 @@ class StarMapScene(QtWidgets.QGraphicsScene):
 		self.area.setPos(0,0)
 		self.stars = []
 
-	def update_stars(self, stars : dict[Star]):
+	def update_stars(self, stars : dict[int, Star]):
 		"""Generic update method: clears and adds new stars"""
 
 		# Removes all stars from view
@@ -193,7 +193,7 @@ class CanvasWindow(QtWidgets.QMainWindow):
 		layout.addWidget(left_panel)
 		layout.addWidget(map_frame, 1)
 
-	def load_map(self, stars : dict[Star]):
+	def load_map(self, stars : dict[int, Star]):
 		"""Update the starmap with new star positions"""
 		self.scene.update_stars(stars)
 
@@ -208,7 +208,7 @@ class WindowManager:
 	def load(self):
 		self.window.show()
 
-	def update_map(self, stars : dict[Star]):
+	def update_map(self, stars : dict[int, Star]):
 		self.window.load_map(stars)
 
 	def app_exec(self):
