@@ -111,7 +111,7 @@ class Fleet:
 
     def __init__(self, data, register=True):
         self.id = data['uid']
-        self._owning_player_id = Player.get(data['puid'])
+        self._owning_player_id = data['puid']
 
         self.x = data['x']
         self.y = data['y']
