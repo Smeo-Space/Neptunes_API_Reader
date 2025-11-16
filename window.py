@@ -30,7 +30,7 @@ class StarItem(QtWidgets.QGraphicsEllipseItem):
 		if owning_player is None:
 			colour = settings.colour_key[0]
 		else:
-			colour = settings.colour_key[owning_player.colour + 1] # dont know if +1 is good or if its silly and i messued up the colour key
+			colour = settings.colour_key[owning_player.colour + 1] # dont know if +1 is good or if its silly and i messed up the colour key
 		self.setBrush(QtGui.QBrush(QtGui.QColor(*colour)))
 		self.setPen(QtCore.Qt.PenStyle.NoPen)
 
